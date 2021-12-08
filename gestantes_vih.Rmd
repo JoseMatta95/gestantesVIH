@@ -53,19 +53,20 @@ df_gestantes<-
 # EDA
 
 ```{r}
-df_gestantes<-
-  df_gestantes %>% 
+sociodemo<-
+  sociodemo %>% 
   mutate(
-    S411H = ifelse(S411H == 1,"Si","No")
+    V102 = as.factor(V102),
+    V005 = V005/1000000
   )
 ```
 
 
 ```{r}
-df2<- svydesign(id =~ V001, strata =~ V022, probs=~V005, data= df_gestantes)
+df2<- svydesign(id =~ V001, strata =~ V022, weights=~V005, data= sociodemo)
 options(survey.lonely.psu="remove")
 
-df_gestantes$S411H %>% as.numeric %>% class()
+svymean(~V102, design = df2, na.rm = T)
 ```
 
 
